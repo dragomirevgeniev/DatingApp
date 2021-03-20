@@ -447,4 +447,6 @@ $RECYCLE.BIN/
 !.vscode/launch.json
 !.vscode/extensions.json
 
+## Sensitive information
 appsettings.json
+ssl
