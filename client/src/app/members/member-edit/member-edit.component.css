@@ -13,3 +13,8 @@
     background-color: #fff;
     border-top: none;
 }
+
+textarea {
+    min-height:40px;
+    max-height: 240px;
+}
