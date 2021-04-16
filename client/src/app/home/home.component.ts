@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { async } from '@angular/core/testing';
 import { Router } from '@angular/router';
+import { User } from '../_models/user';
 import { AccountService } from '../_services/account.service';
 
 @Component({
@@ -13,9 +15,9 @@ export class HomeComponent implements OnInit {
   constructor(private accountService: AccountService, private router: Router) { }
 
   ngOnInit(): void {
-    if (this.accountService.currentUser$) {
-      this.router.navigate(['/members']);
-    }
+    this.accountService.currentUser$.subscribe(user => { 
+      if (user) this.router.navigate(['/members']);
+    })
   }
 
   registerToggle() {
