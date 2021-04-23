@@ -450,3 +450,4 @@ $RECYCLE.BIN/
 ## Sensitive information
 appsettings.json
 ssl
+datingapp.db
