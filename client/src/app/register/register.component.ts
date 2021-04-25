@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { AccountService } from '../_services/account.service';
+import { ToastrService } from 'ngx-toastr';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -10,21 +11,20 @@ import { AccountService } from '../_services/account.service';
 })
 export class RegisterComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
-  model: any = {};
   registerForm: FormGroup;
   maxDate: Date;
-  validationErrors: string[];
+  validationErrors: string[] = [];
 
-  constructor(private accountService: AccountService, private fb: FormBuilder,
-    private router: Router) { }
+  constructor(private accountService: AccountService, private toastr: ToastrService, 
+    private fb: FormBuilder, private router: Router) { }
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.intitializeForm();
     this.maxDate = new Date();
-    this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
+    this.maxDate.setFullYear(this.maxDate.getFullYear() -18);
   }
 
-  initializeForm() {
+  intitializeForm() {
     this.registerForm = this.fb.group({
       gender: ['male'],
       username: ['', Validators.required],
@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
       dateOfBirth: ['', Validators.required],
       city: ['', Validators.required],
       country: ['', Validators.required],
-      password: ['', [Validators.required,
+      password: ['', [Validators.required, 
         Validators.minLength(4), Validators.maxLength(8)]],
       confirmPassword: ['', [Validators.required, this.matchValues('password')]]
     })
@@ -40,13 +40,13 @@ export class RegisterComponent implements OnInit {
 
   matchValues(matchTo: string): ValidatorFn {
     return (control: AbstractControl) => {
-      return control?.value === control?.parent?.controls[matchTo].value
+      return control?.value === control?.parent?.controls[matchTo].value 
         ? null : {isMatching: true}
     }
   }
 
   register() {
-    this.accountService.register(this.model).subscribe(() => {
+    this.accountService.register(this.registerForm.value).subscribe(() => {
       this.router.navigateByUrl('/members');
     }, error => {
       this.validationErrors = error;
@@ -56,5 +56,5 @@ export class RegisterComponent implements OnInit {
   cancel() {
     this.cancelRegister.emit(false);
   }
-  
+
 }
