@@ -62,7 +62,7 @@ namespace API.Data
         {
             return await _context.Users
                 .Include(u => u.Photos)
-                .SingleOrDefaultAsync(user => user.UserName == username);
+                .SingleOrDefaultAsync(user => user.UserName == username.ToUpper());
         }
 
         public async Task<IEnumerable<AppUser>> GetUsersAsync()
